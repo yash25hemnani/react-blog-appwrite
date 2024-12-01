@@ -7,7 +7,6 @@ export class AuthService {
 
     constructor() {
         this.client.setEndpoint(conf.appwriteUrl).setProject(conf.appwriteProjectId);
-
         this.account = new Account(this.client)
     }
 
@@ -47,10 +46,10 @@ export class AuthService {
     async logout() {
         try {
             // await this.account.deleteSession('current')
-            await this.account.deleteSessions(); // Logs OUt from all browsers
+            await this.account.deleteSessions(); // Logs Out from all browsers
             
         } catch (error) {
-            
+            throw error;
         }
     }
 }
