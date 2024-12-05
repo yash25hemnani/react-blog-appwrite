@@ -7,7 +7,7 @@ export class AuthService {
 
     constructor() {
         this.client.setEndpoint(conf.appwriteUrl).setProject(conf.appwriteProjectId);
-        this.account = new Account(this.client)
+        this.account = new Account(this.client) 
     }
 
     async createAccount({email, password, name}){
@@ -18,7 +18,7 @@ export class AuthService {
                 // Call another method that logs in the use directly
                 return this.login({email, password});
             } else {
-                return 
+                return null
             }
         } catch (error) {
             throw error;
@@ -30,17 +30,20 @@ export class AuthService {
             return await this.account.createEmailPasswordSession(email, password);
         } catch (error) {
             throw error;
+            console.log("Error while logging :: login :: ", error)
         }
     }
 
     async getCurrentUser() {
         try {
-            return await this.account.get();
+            const user = await this.account.get();
+            if (user){
+                console.log("User is logged in :: getCurrentUser :: ", user)
+            }
         } catch (error) {
-            throw error;
+            console.log(error);
+            return null;
         }
-
-        return null;
     }
 
     async logout() {
@@ -48,7 +51,8 @@ export class AuthService {
             // await this.account.deleteSession('current')
             await this.account.deleteSessions(); // Logs Out from all browsers
             
-        } catch (error) {
+        } catch (error) {  
+            console.log("User session not removed :: logout :: ", error)
             throw error;
         }
     }
